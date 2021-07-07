@@ -18,7 +18,7 @@ const Map = dynamic(() => import("../components/Map"), {
 	ssr: false,
 });
 
-export default function Slug({ country, countryMonth }) {
+const Slug = ({ country, countryMonth }) => {
 	return (
 		<>
 			<Head>
@@ -74,7 +74,9 @@ export default function Slug({ country, countryMonth }) {
 			</SimpleGrid>
 		</>
 	);
-}
+};
+
+export default Slug;
 
 export async function getServerSideProps({ params }) {
 	const res = await fetch("https://api.covid19api.com/summary");
