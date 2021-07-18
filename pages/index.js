@@ -7,7 +7,6 @@ import { motion } from "framer-motion";
 import NextLink from "next/link";
 import { Select } from "@chakra-ui/react";
 import { useState } from "react";
-import { Octokit } from "@octokit/core";
 import LineGraph from "../components/LineGraph";
 import PieChart from "../components/PieChart";
 import { useColorModeValue } from "@chakra-ui/color-mode";
