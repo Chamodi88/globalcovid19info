@@ -704,21 +704,3 @@ export async function getServerSideProps(context) {
 		},
 	};
 }
-
-// const octokit = new Octokit({
-// 	auth: `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`,
-// });
-// const res1 = await octokit.request(
-// 	"GET /repos/{owner}/{repo}/contents/{path}",
-// 	{
-// 		headers: {
-// 			Accept: "application/vnd.github.VERSION.raw",
-// 		},
-// 		owner: "owid",
-// 		repo: "covid-19-data",
-// 		path: "/public/data/vaccinations/locations.csv",
-// 	}
-// );
-
-// const vacc = await res1.data;
-// const vac = await JSON.stringify(vacc.split("\n").map((x) => x.split(",")));
