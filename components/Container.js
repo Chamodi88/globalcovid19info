@@ -4,8 +4,8 @@ export const Container = (props) => {
 	const { colorMode } = useColorMode();
 
 	const bgColor = {
-		light: "linear-gradient(to right, #de6262, #ffb88c)",
-		dark: "black",
+		light: "white",
+		dark: "#121212",
 	};
 
 	const color = { light: "black", dark: "white" };
@@ -13,7 +13,9 @@ export const Container = (props) => {
 		<Flex
 			direction="column"
 			alignItems="center"
-			justifyContent="flex-start"
+			justifyContent="center"
+			margin={0}
+			padding={0}
 			bg={bgColor[colorMode]}
 			color={color[colorMode]}
 			{...props}

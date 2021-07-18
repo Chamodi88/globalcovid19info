@@ -1,18 +1,19 @@
 import { ChakraProvider, ColorModeProvider } from "@chakra-ui/react";
 import { Container } from "../components/Container";
-import { DarkModeSwitch } from "../components/DarkModeSwitch";
+
 import theme from "../styles/theme";
+import Navbar from "../components/Navbar";
 
 function MyApp({ Component, pageProps }) {
 	return (
 		<ChakraProvider resetCSS theme={theme}>
 			<ColorModeProvider
 				options={{
-					useSystemColorMode: true,
+					useSystemColorMode: false,
 				}}
 			>
-				<Container minHeight="100vh">
-					<DarkModeSwitch />
+				<Container>
+					<Navbar />
 					<Component {...pageProps} />
 				</Container>
 			</ColorModeProvider>

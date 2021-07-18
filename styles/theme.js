@@ -20,8 +20,18 @@ const theme = extendTheme({
 	components: {
 		Heading: {
 			baseStyle: (props) => ({
-				color: mode("red.800", "red.600")(props),
-				margin: "2rem",
+				color: mode("black", "white")(props),
+			}),
+		},
+		Text: {
+			baseStyle: (props) => ({
+				color: mode("black", "gray.400")(props),
+				fontSize: "sm",
+			}),
+		},
+		Divider: {
+			baseStyle: (props) => ({
+				borderColor: mode("gray.200", "gray.700")(props),
 			}),
 		},
 	},
