@@ -650,7 +650,7 @@ export async function getServerSideProps(context) {
 
 	// get vaccinations-by-manufacturer data from spreadsheet
 	const response = await fetch(
-		`https://spreadsheets.google.com/feeds/list/${process.env.SHEET_ID}/1/public/values?alt=json`
+		"https://spreadsheets.google.com/feeds/list/15qAym1D67E6ZDWP-suHn9YRxTEaiEnF90orxWUUZiBs/1/public/values?alt=json"
 	);
 	const jsonData = await response.json();
 	const vaccinesData = [];
