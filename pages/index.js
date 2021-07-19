@@ -588,7 +588,10 @@ export default function Home({
 							const countryCode = getCountryCodeISO2(country.iso_code) ?? "AA";
 
 							return (
-								<NextLink key={country.iso_code} href={"/" + country.iso_code}>
+								<NextLink
+									key={country.iso_code}
+									href={"/country/" + country.iso_code}
+								>
 									<MotionBox
 										justifyContent="center"
 										alignItems="center"

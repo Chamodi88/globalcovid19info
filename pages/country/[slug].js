@@ -10,13 +10,13 @@ import {
 import { Image } from "@chakra-ui/image";
 import { IoCaretBack } from "react-icons/io5";
 import NextLink from "next/link";
-import dynamic from "next/dynamic";
-import { getCountryCodeISO2 } from "../functions/functions";
+// import dynamic from "next/dynamic";
+import { getCountryCodeISO2 } from "../../functions/functions";
 
-const Map = dynamic(() => import("../components/Map"), {
-	loading: () => <p>A map is loading</p>,
-	ssr: false,
-});
+// const Map = dynamic(() => import("../../components/Map"), {
+// 	loading: () => <p>A map is loading</p>,
+// 	ssr: false,
+// });
 
 export default function Slug({ country }) {
 	const countryCode = getCountryCodeISO2(country.iso_code) ?? "AA";
@@ -25,7 +25,7 @@ export default function Slug({ country }) {
 			<Head>
 				<title>{country.Country}</title>
 			</Head>
-			<Flex width="100%" height="30vh" justifyContent="center">
+			<Flex width="100%" height="20vh" justifyContent="center">
 				<Image
 					src={"https://flagcdn.com/" + countryCode.toLowerCase() + ".svg"}
 					alt={country.location}
