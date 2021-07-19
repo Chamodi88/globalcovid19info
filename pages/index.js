@@ -22,8 +22,7 @@ export default function Home({
 	globalData,
 	latestGlobalInfectionData,
 	latestGlobalVaccinationData,
-	total_vaccines,
-	listVaccines,
+	vaccinesData,
 }) {
 	const subHeadingColor = useColorModeValue("#212121", "#ffff");
 	const gridBackgroundColor = useColorModeValue("gray.50", "#272727");
@@ -58,6 +57,31 @@ export default function Home({
 			setSelectedCountry(countries);
 		}
 	};
+
+	var list = [];
+	var vacCountries = vaccinesData.map((c) => c.location);
+	let uniqueVacCountries = [...new Set(vacCountries)];
+	for (var country in uniqueVacCountries) {
+		const countryData = vaccinesData.filter(
+			(c) => c.location == uniqueVacCountries[country]
+		);
+
+		const lastDate = countryData.map((d) => d.date)[countryData.length - 1];
+		const lastUpdate = countryData.filter((c) => c.date == lastDate);
+		list.push(lastUpdate);
+	}
+
+	let vaccines = list.flat().map((v) => v.vaccine);
+	let listVaccines = [...new Set(vaccines)];
+	let total_vaccines = [];
+	for (var v in listVaccines) {
+		const vaccineData = list
+			.flat()
+			.filter((i) => i.vaccine == listVaccines[v])
+			.map((n) => parseInt(n.totalvaccinations))
+			.reduce((a, b) => a + b);
+		total_vaccines.push(vaccineData);
+	}
 
 	return (
 		<>
@@ -668,30 +692,6 @@ export async function getServerSideProps(context) {
 		}
 		vaccinesData.push(formattedRow);
 	}
-	var list = [];
-	var vacCountries = vaccinesData.map((c) => c.location);
-	let uniqueVacCountries = [...new Set(vacCountries)];
-	for (var country in uniqueVacCountries) {
-		const countryData = vaccinesData.filter(
-			(c) => c.location == uniqueVacCountries[country]
-		);
-
-		const lastDate = countryData.map((d) => d.date)[countryData.length - 1];
-		const lastUpdate = countryData.filter((c) => c.date == lastDate);
-		list.push(lastUpdate);
-	}
-
-	let vaccines = list.flat().map((v) => v.vaccine);
-	let listVaccines = [...new Set(vaccines)];
-	let total_vaccines = [];
-	for (var v in listVaccines) {
-		const vaccineData = list
-			.flat()
-			.filter((i) => i.vaccine == listVaccines[v])
-			.map((n) => parseInt(n.totalvaccinations))
-			.reduce((a, b) => a + b);
-		total_vaccines.push(vaccineData);
-	}
 
 	return {
 		props: {
@@ -701,8 +701,7 @@ export async function getServerSideProps(context) {
 			globalData,
 			countries,
 			countryList,
-			total_vaccines,
-			listVaccines,
+			vaccinesData,
 		},
 	};
 }
