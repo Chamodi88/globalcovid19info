@@ -1,3 +1,4 @@
+import { useColorModeValue } from "@chakra-ui/react";
 import { Pie } from "react-chartjs-2";
 
 const PieChart = ({ chartData, chartLabels, chartColors }) => {
@@ -18,7 +19,7 @@ const PieChart = ({ chartData, chartLabels, chartColors }) => {
 			options={{
 				responsive: true,
 				layout: {
-					padding: 5,
+					padding: 3,
 				},
 				maintainAspectRatio: false,
 				plugins: {
@@ -26,7 +27,8 @@ const PieChart = ({ chartData, chartLabels, chartColors }) => {
 						position: "bottom",
 						labels: {
 							font: {
-								size: 8,
+								size: 9,
+								color: useColorModeValue("lightPalette.300", "darkPalette.200"),
 							},
 						},
 					},

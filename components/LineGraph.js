@@ -1,6 +1,13 @@
 import { Line } from "react-chartjs-2";
 
-const LineGraph = ({ graphData, selectedOption, gridColor, labelColor }) => {
+const LineGraph = ({
+	graphData,
+	selectedOption,
+	gridColor,
+	labelColor,
+	lineColor,
+	backgroundColor,
+}) => {
 	const filteredData = graphData.map((record) => ({
 		date: record.date,
 		[selectedOption]: record[selectedOption],
@@ -21,17 +28,17 @@ const LineGraph = ({ graphData, selectedOption, gridColor, labelColor }) => {
 							data: filteredData.map((x) => x[selectedOption]),
 							fill: true,
 							lineTension: 0.5,
-							backgroundColor: "#db86b2",
-							borderColor: "#B57295",
+							backgroundColor: backgroundColor,
+							borderColor: lineColor,
 							borderCapStyle: "butt",
 							borderDashOffset: 0.0,
-							borderJoinStyle: "#B57295",
-							pointBorderColor: "#B57295",
+							borderJoinStyle: lineColor,
+							pointBorderColor: lineColor,
 							pointBackgroundColor: "#fff",
 							pointBorderWidth: 1,
 							pointHoverRadius: 5,
-							pointHoverBackgroundColor: "#B57295",
-							pointHoverBorderColor: "#B57295",
+							pointHoverBackgroundColor: lineColor,
+							pointHoverBorderColor: lineColor,
 							pointHoverBorderWidth: 2,
 							pointRadius: 1,
 							pointHitRadius: 10,

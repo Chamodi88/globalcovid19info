@@ -1,98 +1,192 @@
 import Head from "next/head";
-import {
-	Heading,
-	Box,
-	Center,
-	Text,
-	Flex,
-	SimpleGrid,
-} from "@chakra-ui/layout";
-import { Image } from "@chakra-ui/image";
-import { IoCaretBack } from "react-icons/io5";
-import NextLink from "next/link";
-// import dynamic from "next/dynamic";
+import { Heading, Center, Flex } from "@chakra-ui/layout";
 import { getCountryCodeISO2 } from "../../functions/functions";
+import { Divider } from "@chakra-ui/react";
+import Layout from "../../components/Layout";
 
-// const Map = dynamic(() => import("../../components/Map"), {
-// 	loading: () => <p>A map is loading</p>,
-// 	ssr: false,
-// });
+export default function Slug({ country, countryVaccinesData }) {
+	const latestCountryInfectionData = country.data[country.data.length - 1];
+	const countryVaccinationData = country.data.filter(
+		(c) => c.total_vaccinations > 0
+	);
+	const latestCountryVaccinationData =
+		countryVaccinationData[countryVaccinationData.length - 1];
 
-export default function Slug({ country }) {
 	const countryCode = getCountryCodeISO2(country.iso_code) ?? "AA";
+
+	const lastDate = countryVaccinesData.map((d) => d.date)[
+		countryVaccinesData.length - 1
+	];
+	const countryVaccines = countryVaccinesData.filter((c) => c.date == lastDate);
+	const total_vaccines = countryVaccines.map((c) => c.totalvaccinations);
+	const listVaccines = countryVaccines.map((c) => c.vaccine);
+
 	return (
 		<>
 			<Head>
-				<title>{country.Country}</title>
+				<title>{country.location}</title>
 			</Head>
-			<Flex width="100%" height="20vh" justifyContent="center">
-				<Image
-					src={"https://flagcdn.com/" + countryCode.toLowerCase() + ".svg"}
-					alt={country.location}
-					objectFit="cover"
-					height="30vh"
+
+			<Flex
+				width="100%"
+				height="25vh"
+				backgroundImage={
+					"https://flagcdn.com/" + countryCode.toLowerCase() + ".svg"
+				}
+				alt={country.location}
+				backgroundSize="100% 100%"
+			>
+				<Flex
 					width="100%"
+					height="100%"
+					justifyContent="center"
+					alignItems="center"
+					bg="rgba(0, 0, 0, 0.5)"
+				>
+					<Center>
+						<Heading as="h5" size="lg" color="darkPalette.100">
+							{country.location}
+						</Heading>
+					</Center>
+				</Flex>
+			</Flex>
+
+			<Flex
+				direction="column"
+				alignItems="center"
+				justifyContent="center"
+				marginTop={0}
+				padding={0}
+				minHeight="75vh"
+			>
+				{/* infection data */}
+				<Layout
+					title="Infection Data"
+					statsData={country}
+					data={country.data}
+					latestData={latestCountryInfectionData}
+					graphOptions={[
+						{ value: "new_cases", label: "New Cases" },
+						{ value: "new_deaths", label: "New Deaths" },
+						{ value: "total_cases", label: "Total Cases" },
+						{ value: "total_deaths", label: "Total Deaths" },
+						{ value: "new_cases_per_million", label: "New Cases per Million" },
+						{
+							value: "new_deaths_per_million",
+							label: "	New Deaths per Million",
+						},
+						{
+							value: "total_cases_per_million",
+							label: "Total Cases per Million",
+						},
+						{
+							value: "total_deaths_per_million",
+							label: "Total Deaths per Million",
+						},
+					]}
+					LatestMetrics={[
+						{ value: "new_cases", label: "New Cases" },
+						{ value: "new_deaths", label: "New Deaths" },
+						{ value: "total_cases", label: "Total Cases" },
+						{ value: "total_deaths", label: "Total Deaths" },
+					]}
+					pieChartMetrics={[{ value1: "total_cases", value2: "total_deaths" }]}
+					pieChartLabels={[
+						"% Total Cases",
+						"% Total Deaths",
+						"% Total Uninfected",
+					]}
+					pieChartColors={["#FFB0AD", "#AD5653", "#42AD67"]}
+					demographicData={true}
+					graphLineColor="#AD5653"
+					graphBackgroundColor="#FA9692"
+					initialState="total_cases"
+				/>
+
+				<Divider margin="1rem" />
+				{/* vaccination data */}
+
+				<Layout
+					title="Vaccination Data"
+					statsData={country}
+					data={country.data}
+					latestData={latestCountryVaccinationData}
+					graphOptions={[
+						{ value: "new_vaccinations", label: "New Vaccinations" },
+						{ value: "people_vaccinated", label: "People Vaccinated" },
+						{
+							value: "people_fully_vaccinated",
+							label: "People Fully Vaccinated",
+						},
+						{ value: "total_vaccinations", label: "Total Vaccinations" },
+						{
+							value: "people_vaccinated_per_hundred",
+							label: "People Vaccinated per Hundred",
+						},
+						{
+							value: "people_fully_vaccinated_per_hundred",
+							label: "People Fully Vaccinated per Hundred",
+						},
+						{
+							value: "total_vaccinations_per_hundred",
+							label: "Total Vaccinated per Hundred",
+						},
+						{
+							value: "total_deaths_per_million",
+							label: "Total Deaths per Million",
+						},
+					]}
+					LatestMetrics={[
+						{
+							value: "people_fully_vaccinated",
+							label: "People Fully Vaccinated",
+						},
+						{ value: "people_vaccinated", label: "People Vaccinated" },
+						{ value: "total_vaccinations", label: "Total Vaccinations" },
+					]}
+					pieChartMetrics={[
+						{ value1: "people_vaccinated", value2: "people_fully_vaccinated" },
+					]}
+					pieChartLabels={[
+						"% At least 1 dose",
+						"% Fully Vaccinated",
+						"% Unvaccinated",
+					]}
+					pieChartColors={["#91FAB5", "#42AD67", "#FA9692"]}
+					demographicData={false}
+					total_vaccines={total_vaccines}
+					listVaccines={listVaccines}
+					graphLineColor="#42AD67"
+					graphBackgroundColor="#91FAB5"
+					initialState="total_vaccinations"
 				/>
 			</Flex>
-			<Box bg="black" width="100%">
-				<Center>
-					<NextLink href="/">
-						<a>
-							<IoCaretBack color="white" fontSize="1.5rem" />
-						</a>
-					</NextLink>
-					<Heading as="h5" size="md" color="gray.500">
-						{country.location}
-					</Heading>
-				</Center>
-			</Box>
-			{/* <SimpleGrid justifyContent="center" columns={[1, 2]} spacing={5}>
-				<Box margin={5} bg="white" width="100%">
-					<Box>
-						<Map countryMonth={countryMonth[0]} />
-					</Box>
-					<Center margin={2}>
-						<Text>Country Code : {country.CountryCode}</Text>
-					</Center>
-					<Flex flexDirection={{ base: "column", md: "row" }}>
-						<Box marginRight={5}>
-							<Text>New Confirmed : {country.NewConfirmed}</Text>
-							<Text>New Deaths : {country.NewDeaths}</Text>
-							<Text>New Recovered : {country.NewRecovered}</Text>
-						</Box>
-						<Box>
-							<Text>Total Confirmed : {country.TotalRecovered}</Text>
-							<Text>Total Deaths : {country.TotalDeaths}</Text>
-							<Text>Total Recovered : {country.TotalRecovered}</Text>
-						</Box>
-					</Flex>
-				</Box>
-				<Box margin={5} bg="white" width="100%">
-					<LineChart countryMonth={countryMonth} />
-				</Box>
-			</SimpleGrid> */}
 		</>
 	);
 }
 
-export async function getServerSideProps({ params }) {
-	// const res = await fetch("https://api.covid19api.com/summary");
-	// const data = await res.json();
-	// const country = await data.Countries.filter(
-	// 	(country) => country.Slug == params.slug
-	// );
-	// let previousMonth = new Date(data.Date.split("T")[0]);
-	// previousMonth.setMonth(previousMonth.getMonth() - 1);
-	// previousMonth = JSON.stringify(previousMonth).split("T")[0].replace('"', "");
-	// const res1 = await fetch(
-	// 	`https://api.covid19api.com/country/${
-	// 		params.slug
-	// 	}/status/confirmed?from=${previousMonth}T00:00:00Z&to=${
-	// 		data.Date.split("T")[0]
-	// 	}T00:00:00Z`
-	// );
-	// const countryMonth = await res1.json();
+export async function getStaticPaths() {
+	const res = await fetch(
+		"https://covid.ourworldindata.org/data/owid-covid-data.json"
+	);
+	const data = await res.json();
 
+	const countries = await Object.entries(data)
+		.map((obj) => ({
+			...obj[1],
+			iso_code: obj[0],
+		}))
+		.filter((obj) => obj.continent != null);
+
+	const paths = countries.map((c) => ({
+		params: {
+			slug: c.iso_code,
+		},
+	}));
+	return { paths, fallback: false };
+}
+
+export async function getStaticProps({ params }) {
 	const res = await fetch(
 		"https://covid.ourworldindata.org/data/owid-covid-data.json"
 	);
@@ -109,7 +203,38 @@ export async function getServerSideProps({ params }) {
 		(country) => country.iso_code == params.slug
 	);
 
+	// get vaccinations-by-manufacturer data from spreadsheet
+	const response = await fetch(
+		"https://spreadsheets.google.com/feeds/list/15qAym1D67E6ZDWP-suHn9YRxTEaiEnF90orxWUUZiBs/1/public/values?alt=json",
+		{
+			headers: {
+				Accept: "application/atom+xml,application/json, text/plain, */*",
+				"User-Agent": "*",
+			},
+		}
+	);
+	const jsonData = await response.json();
+
+	const vaccinesData = [];
+	const rows = jsonData.feed.entry;
+
+	for (const row of rows) {
+		const formattedRow = {};
+
+		for (const key in row) {
+			if (key.startsWith("gsx$")) {
+				formattedRow[key.replace("gsx$", "")] = row[key].$t;
+			}
+		}
+		vaccinesData.push(formattedRow);
+	}
+
+	const countryVaccinesData = vaccinesData.filter(
+		(v) => v.location == country[0].location
+	);
+
 	return {
-		props: { country: country[0] },
+		props: { country: country[0], countryVaccinesData },
+		revalidate: 1,
 	};
 }
