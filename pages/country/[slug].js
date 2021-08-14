@@ -1,8 +1,10 @@
 import Head from "next/head";
-import { Heading, Center, Flex } from "@chakra-ui/layout";
+import { Heading, Center, Flex,Text } from "@chakra-ui/layout";
 import { getCountryCodeISO2 } from "../../functions/functions";
 import { Divider } from "@chakra-ui/react";
 import Layout from "../../components/Layout";
+import { getVaccinesData } from "../../lib/api";
+import { useColorModeValue } from "@chakra-ui/color-mode";
 
 export default function Slug({ country, countryVaccinesData }) {
 	const latestCountryInfectionData = country.data[country.data.length - 1];
@@ -18,8 +20,17 @@ export default function Slug({ country, countryVaccinesData }) {
 		countryVaccinesData.length - 1
 	];
 	const countryVaccines = countryVaccinesData.filter((c) => c.date == lastDate);
-	const total_vaccines = countryVaccines.map((c) => c.totalvaccinations);
+	const total_vaccines = countryVaccines.map((c) => c.total_vaccinations);
 	const listVaccines = countryVaccines.map((c) => c.vaccine);
+
+	const gridBackgroundColor = useColorModeValue(
+		"lightPalette.100",
+		"darkPalette.800"
+	);
+	const gridBorderColor = useColorModeValue(
+		"lightPalette.200",
+		"darkPalette.700"
+	);
 
 	return (
 		<>
@@ -105,61 +116,73 @@ export default function Slug({ country, countryVaccinesData }) {
 
 				<Divider margin="1rem" />
 				{/* vaccination data */}
-
-				<Layout
-					title="Vaccination Data"
-					statsData={country}
-					data={country.data}
-					latestData={latestCountryVaccinationData}
-					graphOptions={[
-						{ value: "new_vaccinations", label: "New Vaccinations" },
-						{ value: "people_vaccinated", label: "People Vaccinated" },
-						{
-							value: "people_fully_vaccinated",
-							label: "People Fully Vaccinated",
-						},
-						{ value: "total_vaccinations", label: "Total Vaccinations" },
-						{
-							value: "people_vaccinated_per_hundred",
-							label: "People Vaccinated per Hundred",
-						},
-						{
-							value: "people_fully_vaccinated_per_hundred",
-							label: "People Fully Vaccinated per Hundred",
-						},
-						{
-							value: "total_vaccinations_per_hundred",
-							label: "Total Vaccinated per Hundred",
-						},
-						{
-							value: "total_deaths_per_million",
-							label: "Total Deaths per Million",
-						},
-					]}
-					LatestMetrics={[
-						{
-							value: "people_fully_vaccinated",
-							label: "People Fully Vaccinated",
-						},
-						{ value: "people_vaccinated", label: "People Vaccinated" },
-						{ value: "total_vaccinations", label: "Total Vaccinations" },
-					]}
-					pieChartMetrics={[
-						{ value1: "people_vaccinated", value2: "people_fully_vaccinated" },
-					]}
-					pieChartLabels={[
-						"% At least 1 dose",
-						"% Fully Vaccinated",
-						"% Unvaccinated",
-					]}
-					pieChartColors={["#91FAB5", "#42AD67", "#FA9692"]}
-					demographicData={false}
-					total_vaccines={total_vaccines}
-					listVaccines={listVaccines}
-					graphLineColor="#42AD67"
-					graphBackgroundColor="#91FAB5"
-					initialState="total_vaccinations"
-				/>
+				{countryVaccinationData.length === 0 ? (
+					<Flex width="99%" bg={gridBackgroundColor}
+					borderColor={gridBorderColor}
+					borderWidth={1}
+					padding={["0.1rem", "0.5rem"]}
+					margin={2}
+					alignItems="center"
+					justifyContent="center"><Text>Vaccination data unavailable</Text></Flex>
+				) : (
+					<Layout
+						title="Vaccination Data"
+						statsData={country}
+						data={country.data}
+						latestData={latestCountryVaccinationData}
+						graphOptions={[
+							{ value: "new_vaccinations", label: "New Vaccinations" },
+							{ value: "people_vaccinated", label: "People Vaccinated" },
+							{
+								value: "people_fully_vaccinated",
+								label: "People Fully Vaccinated",
+							},
+							{ value: "total_vaccinations", label: "Total Vaccinations" },
+							{
+								value: "people_vaccinated_per_hundred",
+								label: "People Vaccinated per Hundred",
+							},
+							{
+								value: "people_fully_vaccinated_per_hundred",
+								label: "People Fully Vaccinated per Hundred",
+							},
+							{
+								value: "total_vaccinations_per_hundred",
+								label: "Total Vaccinated per Hundred",
+							},
+							{
+								value: "total_deaths_per_million",
+								label: "Total Deaths per Million",
+							},
+						]}
+						LatestMetrics={[
+							{
+								value: "people_fully_vaccinated",
+								label: "People Fully Vaccinated",
+							},
+							{ value: "people_vaccinated", label: "People Vaccinated" },
+							{ value: "total_vaccinations", label: "Total Vaccinations" },
+						]}
+						pieChartMetrics={[
+							{
+								value1: "people_vaccinated",
+								value2: "people_fully_vaccinated",
+							},
+						]}
+						pieChartLabels={[
+							"% At least 1 dose",
+							"% Fully Vaccinated",
+							"% Unvaccinated",
+						]}
+						pieChartColors={["#91FAB5", "#42AD67", "#FA9692"]}
+						demographicData={false}
+						total_vaccines={total_vaccines}
+						listVaccines={listVaccines}
+						graphLineColor="#42AD67"
+						graphBackgroundColor="#91FAB5"
+						initialState="total_vaccinations"
+					/>
+				)}
 			</Flex>
 		</>
 	);
@@ -204,30 +227,7 @@ export async function getStaticProps({ params }) {
 	);
 
 	// get vaccinations-by-manufacturer data from spreadsheet
-	const response = await fetch(
-		"https://spreadsheets.google.com/feeds/list/15qAym1D67E6ZDWP-suHn9YRxTEaiEnF90orxWUUZiBs/1/public/values?alt=json",
-		{
-			headers: {
-				Accept: "application/atom+xml,application/json, text/plain, */*",
-				"User-Agent": "*",
-			},
-		}
-	);
-	const jsonData = await response.json();
-
-	const vaccinesData = [];
-	const rows = jsonData.feed.entry;
-
-	for (const row of rows) {
-		const formattedRow = {};
-
-		for (const key in row) {
-			if (key.startsWith("gsx$")) {
-				formattedRow[key.replace("gsx$", "")] = row[key].$t;
-			}
-		}
-		vaccinesData.push(formattedRow);
-	}
+	const vaccinesData = await getVaccinesData();
 
 	const countryVaccinesData = vaccinesData.filter(
 		(v) => v.location == country[0].location
@@ -235,6 +235,6 @@ export async function getStaticProps({ params }) {
 
 	return {
 		props: { country: country[0], countryVaccinesData },
-		revalidate: 1,
+		revalidate: 60,
 	};
 }

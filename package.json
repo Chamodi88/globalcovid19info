@@ -1,6 +1,7 @@
 {
 	"name": "covid",
 	"version": "0.1.0",
+	"main": "server.js",
 	"private": true,
 	"scripts": {
 		"dev": "next dev",
@@ -16,10 +17,9 @@
 		"@emotion/react": "^11.4.0",
 		"@emotion/styled": "^11.3.0",
 		"chart.js": "^3.4.1",
-		"firebase": "^8.7.1",
-		"firebase-admin": "^9.11.0",
-		"firebase-functions": "^3.14.1",
+		"firebase": "^8.8.1",
 		"framer-motion": "^4.1.17",
+		"googleapis": "^83.0.0",
 		"leaflet": "^1.7.1",
 		"next": "11.0.1",
 		"react": "17.0.2",

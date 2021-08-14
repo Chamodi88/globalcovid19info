@@ -12,6 +12,7 @@ import { getCountryCodeISO2 } from "../functions/functions";
 import { Divider } from "@chakra-ui/react";
 import Layout from "../components/Layout";
 import { useBreakpointValue } from "@chakra-ui/react";
+import { getVaccinesData } from "../lib/api";
 
 const MotionBox = motion(Box);
 
@@ -69,17 +70,20 @@ export default function Home({
 		const vaccineData = list
 			.flat()
 			.filter((i) => i.vaccine == listVaccines[v])
-			.map((n) => parseInt(n.totalvaccinations))
+			.map((n) => parseInt(n.total_vaccinations))
 			.reduce((a, b) => a + b);
 		total_vaccines.push(vaccineData);
 	}
 
 	return (
 		<>
-			<Head>
+			<Head >
 				<title>Covid19Info</title>
 				<link rel="icon" href="/favicon.ico" />
 				<meta name="viewport" content="initial-scale=1.0, width=device-width" />
+				<meta name="description" content="Corona virus monitoring dashboard" />
+				<meta name="keywords" content="Corona, Covid19,virus,dashboard, pandemic,vaccination" />
+
 			</Head>
 
 			{/* infection data */}
@@ -152,8 +156,8 @@ export default function Home({
 						label: "Total Vaccinated per Hundred",
 					},
 					{
-						value: "total_deaths_per_million",
-						label: "Total Deaths per Million",
+						value: "total_vaccinations_per_million",
+						label: "Total vaccinations per Million",
 					},
 				]}
 				LatestMetrics={[
@@ -302,7 +306,7 @@ export default function Home({
 	);
 }
 
-export async function getStaticProps(context) {
+export async function getStaticProps() {
 	const res = await fetch(
 		"https://covid.ourworldindata.org/data/owid-covid-data.json"
 	);
@@ -322,30 +326,7 @@ export async function getStaticProps(context) {
 	const countryList = await countries.map((country) => country.location);
 
 	// get vaccinations-by-manufacturer data from spreadsheet
-	const response = await fetch(
-		"https://spreadsheets.google.com/feeds/list/15qAym1D67E6ZDWP-suHn9YRxTEaiEnF90orxWUUZiBs/1/public/values?alt=json",
-		{
-			headers: {
-				Accept: "application/atom+xml,application/json, text/plain, */*",
-				"User-Agent": "*",
-			},
-		}
-	);
-	const jsonData = await response.json();
-
-	const vaccinesData = [];
-	const rows = jsonData.feed.entry;
-
-	for (const row of rows) {
-		const formattedRow = {};
-
-		for (const key in row) {
-			if (key.startsWith("gsx$")) {
-				formattedRow[key.replace("gsx$", "")] = row[key].$t;
-			}
-		}
-		vaccinesData.push(formattedRow);
-	}
+	const vaccinesData = await getVaccinesData();
 
 	return {
 		props: {
@@ -355,8 +336,8 @@ export async function getStaticProps(context) {
 			globalData,
 			countries,
 			countryList,
-			vaccinesData,
+			vaccinesData: vaccinesData.slice(1, vaccinesData.length),
 		},
-		revalidate: 1,
+		revalidate: 60,
 	};
 }
