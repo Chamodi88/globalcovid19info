@@ -12,7 +12,7 @@
 		]
 	},
 	"hosting": {
-		"public": "/home/runner/work/***/***/out",
+		"public": "globalcovid19info/out",
 		"ignore": ["firebase.json", "**/.*", "**/node_modules/**"]
 	}
 }
