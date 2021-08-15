@@ -35,6 +35,7 @@ jobs:
     steps:
       - name: Checkout Repo
         uses: actions/checkout@main
+      - name: change directory
         run: cd globalcovid19info
       - name: GitHub Action for Firebase
         uses: w9jds/firebase-action@v2.0.0
