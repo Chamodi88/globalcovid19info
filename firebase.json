@@ -1,22 +1,18 @@
 {
-  "functions": {
-    "source": ".",
-    "runtime": "nodejs14",
-    "ignore": [
-      ".firebase/**",
-      ".firebaserc",
-      "firebase.json",
-      "**/node_modules/**",
-      "**/public/**",
-      "**/.next/cache/**"
-    ]
-  },
-  "hosting": {
-    "public": "out",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ]
-  }
+	"functions": {
+		"source": ".",
+		"runtime": "nodejs14",
+		"ignore": [
+			".firebase/**",
+			".firebaserc",
+			"firebase.json",
+			"**/node_modules/**",
+			"**/public/**",
+			"**/.next/cache/**"
+		]
+	},
+	"hosting": {
+		"public": "/home/runner/work/***/***/out",
+		"ignore": ["firebase.json", "**/.*", "**/node_modules/**"]
+	}
 }
