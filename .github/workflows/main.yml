@@ -1,17 +1,17 @@
 name: globalcovid19info
 on:
   schedule:
-    - cron:  '15 * * * *' 
-env: 
-  NEXT_PUBLIC_GOOGLE_SHEETS_CLIENT_EMAIL: ${{secrets.NEXT_PUBLIC_GOOGLE_SHEETS_CLIENT_EMAIL}} 
-  NEXT_PUBLIC_GOOGLE_SHEETS_PRIVATE_KEY: ${{secrets.NEXT_PUBLIC_GOOGLE_SHEETS_PRIVATE_KEY}} 
-  NEXT_PUBLIC_SPREADSHEET_ID: ${{secrets.NEXT_PUBLIC_SPREADSHEET_ID}} 
-  NEXT_PUBLIC_FIREBASE_APIKEY: ${{secrets.NEXT_PUBLIC_FIREBASE_APIKEY}} 
-  NEXT_PUBLIC_FIREBASE_AUTHDOMAIN: ${{secrets.NEXT_PUBLIC_FIREBASE_AUTHDOMAIN}} 
-  NEXT_PUBLIC_FIREBASE_PROJECTID: ${{secrets.NEXT_PUBLIC_FIREBASE_PROJECTID}} 
-  NEXT_PUBLIC_FIREBASE_STORAGEBUCKET: ${{secrets.NEXT_PUBLIC_FIREBASE_STORAGEBUCKET}} 
-  NEXT_PUBLIC_FIREBASE_MESSAGINGSENDERID: ${{secrets.NEXT_PUBLIC_FIREBASE_MESSAGINGSENDERID}} 
-  NEXT_PUBLIC_FIREBASE_APPID: ${{secrets.NEXT_PUBLIC_FIREBASE_APPID}} 
+    - cron: "* * * * *"
+env:
+  NEXT_PUBLIC_GOOGLE_SHEETS_CLIENT_EMAIL: ${{secrets.NEXT_PUBLIC_GOOGLE_SHEETS_CLIENT_EMAIL}}
+  NEXT_PUBLIC_GOOGLE_SHEETS_PRIVATE_KEY: ${{secrets.NEXT_PUBLIC_GOOGLE_SHEETS_PRIVATE_KEY}}
+  NEXT_PUBLIC_SPREADSHEET_ID: ${{secrets.NEXT_PUBLIC_SPREADSHEET_ID}}
+  NEXT_PUBLIC_FIREBASE_APIKEY: ${{secrets.NEXT_PUBLIC_FIREBASE_APIKEY}}
+  NEXT_PUBLIC_FIREBASE_AUTHDOMAIN: ${{secrets.NEXT_PUBLIC_FIREBASE_AUTHDOMAIN}}
+  NEXT_PUBLIC_FIREBASE_PROJECTID: ${{secrets.NEXT_PUBLIC_FIREBASE_PROJECTID}}
+  NEXT_PUBLIC_FIREBASE_STORAGEBUCKET: ${{secrets.NEXT_PUBLIC_FIREBASE_STORAGEBUCKET}}
+  NEXT_PUBLIC_FIREBASE_MESSAGINGSENDERID: ${{secrets.NEXT_PUBLIC_FIREBASE_MESSAGINGSENDERID}}
+  NEXT_PUBLIC_FIREBASE_APPID: ${{secrets.NEXT_PUBLIC_FIREBASE_APPID}}
   NEXT_PUBLIC_FIREBASE_MEASUREMENTID: ${{secrets.NEXT_PUBLIC_FIREBASE_MEASUREMENTID}}
 
 jobs:
@@ -26,7 +26,7 @@ jobs:
       - name: Build
         run: npm run build
       - name: Archive Production Artifact
-        uses: actions/upload-artifact@v2.0.0
+        uses: actions/upload-artifact@v2
         with:
           name: out
           path: out
@@ -39,7 +39,7 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@main
       - name: Download Artifact
-        uses: actions/download-artifact@v2.0.0
+        uses: actions/download-artifact@v2
         with:
           name: out
           path: out
