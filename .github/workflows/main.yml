@@ -25,6 +25,11 @@ jobs:
         run: npm install
       - name: Build
         run: npm run build
+      - name: Archive Production Artifact
+        uses: actions/upload-artifact@v2.0.0
+        with:
+          name: out
+          path: out
 
   deploy:
     name: Deploy
@@ -33,6 +38,11 @@ jobs:
     steps:
       - name: Checkout Repo
         uses: actions/checkout@main
+      - name: Download Artifact
+        uses: actions/download-artifact@v2.0.0
+        with:
+          name: out
+          path: out
       - name: GitHub Action for Firebase
         uses: w9jds/firebase-action@v2.0.0
         with:
