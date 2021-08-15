@@ -1,7 +1,7 @@
 name: globalcovid19info
 on:
   schedule:
-    - cron: "15 * * * *"
+    - cron: "* * * * *"
 env:
   NEXT_PUBLIC_GOOGLE_SHEETS_CLIENT_EMAIL: ${{secrets.NEXT_PUBLIC_GOOGLE_SHEETS_CLIENT_EMAIL}}
   NEXT_PUBLIC_GOOGLE_SHEETS_PRIVATE_KEY: ${{secrets.NEXT_PUBLIC_GOOGLE_SHEETS_PRIVATE_KEY}}
@@ -41,3 +41,4 @@ jobs:
           args: deploy --only hosting
         env:
           FIREBASE_TOKEN: ${{ secrets.NEXT_PUBLIC_FIREBASE_TOKEN }}
+          PROJECT_PATH: ./out
