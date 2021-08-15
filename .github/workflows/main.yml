@@ -27,6 +27,9 @@ jobs:
         run: npm run build
       - name: Export
         run: npm run export
+      - name: Display directory structure
+        run: ls -R
+        shell: bash
 
   deploy:
     name: Deploy
