@@ -1,7 +1,12 @@
 name: globalcovid19info
 on:
   schedule:
-    - cron: "* 6 * * *"
+    - cron: "* * * * *"
+
+defaults:
+  run:
+    working-directory: globalcovid19info
+
 env:
   NEXT_PUBLIC_GOOGLE_SHEETS_CLIENT_EMAIL: ${{secrets.NEXT_PUBLIC_GOOGLE_SHEETS_CLIENT_EMAIL}}
   NEXT_PUBLIC_GOOGLE_SHEETS_PRIVATE_KEY: ${{secrets.NEXT_PUBLIC_GOOGLE_SHEETS_PRIVATE_KEY}}
@@ -27,6 +32,11 @@ jobs:
         run: npm run build
       - name: Export
         run: npm run export
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: out
+          path: globalcovid19info/out
 
   deploy:
     name: Deploy
@@ -35,8 +45,11 @@ jobs:
     steps:
       - name: Checkout Repo
         uses: actions/checkout@main
-      - name: change directory
-        run: cd globalcovid19info
+      - name: Download Artifact
+        uses: actions/download-artifact@master
+        with:
+          name: out
+          path: globalcovid19info/out
       - name: GitHub Action for Firebase
         uses: w9jds/firebase-action@v2.0.0
         with:
