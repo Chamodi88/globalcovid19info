@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { Heading, Center, Flex,Text } from "@chakra-ui/layout";
+import { Heading, Center, Flex, Text } from "@chakra-ui/layout";
 import { getCountryCodeISO2 } from "../../functions/functions";
 import { Divider } from "@chakra-ui/react";
 import Layout from "../../components/Layout";
@@ -117,13 +117,18 @@ export default function Slug({ country, countryVaccinesData }) {
 				<Divider margin="1rem" />
 				{/* vaccination data */}
 				{countryVaccinationData.length === 0 ? (
-					<Flex width="99%" bg={gridBackgroundColor}
-					borderColor={gridBorderColor}
-					borderWidth={1}
-					padding={["0.1rem", "0.5rem"]}
-					margin={2}
-					alignItems="center"
-					justifyContent="center"><Text>Vaccination data unavailable</Text></Flex>
+					<Flex
+						width="99%"
+						bg={gridBackgroundColor}
+						borderColor={gridBorderColor}
+						borderWidth={1}
+						padding={["0.1rem", "0.5rem"]}
+						margin={2}
+						alignItems="center"
+						justifyContent="center"
+					>
+						<Text>Vaccination data unavailable</Text>
+					</Flex>
 				) : (
 					<Layout
 						title="Vaccination Data"
@@ -151,8 +156,8 @@ export default function Slug({ country, countryVaccinesData }) {
 								label: "Total Vaccinated per Hundred",
 							},
 							{
-								value: "total_deaths_per_million",
-								label: "Total Deaths per Million",
+								value: "total_vaccinations_per_million",
+								label: "Total vaccinations per Million",
 							},
 						]}
 						LatestMetrics={[
